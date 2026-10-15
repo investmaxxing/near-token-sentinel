@@ -1,0 +1,36 @@
+name: Monitor token
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: near-token-monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    env:
+      MONITORED_TOKEN_ACCOUNT_ID: ${{ vars.MONITORED_TOKEN_ACCOUNT_ID }}
+      NEAR_RPC_URL: ${{ vars.NEAR_RPC_URL }}
+      OUTPUT_PATH: data/latest.json
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run tests
+        run: npm test
+      - name: Capture token snapshot
+        run: npm run monitor
+      - name: Upload snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: token-snapshot
+          path: data/latest.json
+          if-no-files-found: error
+          retention-days: 7

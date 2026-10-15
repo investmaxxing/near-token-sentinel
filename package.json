@@ -1,0 +1,15 @@
+{
+  "name": "near-token-sentinel",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local-first monitoring for one NEAR fungible token.",
+  "scripts": {
+    "monitor": "node src/monitor.mjs",
+    "telegram:test": "node src/telegram-check.mjs",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
